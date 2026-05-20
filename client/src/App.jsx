@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import Layout from './components/Layout'
 import Home from './pages/Home'
-/* import Login from './pages/Login' */
-/* import Rating from './pages/Rating'
- */import Search from './pages/Search'
+import Login from './pages/Login'
+import Rating from './pages/Rating'
+import Search from './pages/Search'
 import SearchDetail from './pages/SearchDetail'
 import Contact from './pages/Contact'
 import Profile from './pages/Profile'
