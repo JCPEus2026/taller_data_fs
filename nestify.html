@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NESTIFY — Encuentra tu hogar</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0a0f;--surface:#13131a;--surface2:#1c1c26;--accent:#7c3aed;--accent2:#06b6d4;--accent3:#f59e0b;--text:#f1f0ff;--muted:#8882a8;--border:rgba(124,58,237,0.2);--glow:0 0 40px rgba(124,58,237,0.3)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at 20% 20%,rgba(124,58,237,0.12) 0%,transparent 50%),radial-gradient(ellipse at 80% 80%,rgba(6,182,212,0.08) 0%,transparent 50%);pointer-events:none;z-index:0}
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 3rem;background:rgba(10,10,15,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:.6rem;font-family:'Syne',sans-serif;font-weight:800;font-size:1.5rem;letter-spacing:-.03em;text-decoration:none;color:var(--text)}
+.logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;box-shadow:0 0 20px rgba(124,58,237,0.5)}
+.logo span{color:var(--accent2)}
+.badge{background:linear-gradient(90deg,var(--accent),var(--accent2));color:white;font-size:.7rem;font-weight:600;padding:.3rem .8rem;border-radius:999px;letter-spacing:.05em;text-transform:uppercase}
+.hero{position:relative;z-index:1;text-align:center;padding:6rem 2rem 4rem}
+.hero-tag{display:inline-flex;align-items:center;gap:.5rem;background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.4);color:#c4b5fd;font-size:.8rem;font-weight:500;padding:.4rem 1rem;border-radius:999px;margin-bottom:2rem;letter-spacing:.05em;animation:fadeDown .6s ease both}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(2.8rem,7vw,5.5rem);font-weight:800;line-height:1.05;letter-spacing:-.04em;margin-bottom:1.5rem;animation:fadeDown .6s .1s ease both}
+.hero h1 .gradient{background:linear-gradient(135deg,var(--accent2) 0%,var(--accent) 50%,var(--accent3) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:1.1rem;color:var(--muted);max-width:500px;margin:0 auto 3rem;line-height:1.7;animation:fadeDown .6s .2s ease both}
+.form-wrapper{position:relative;z-index:1;max-width:780px;margin:0 auto;padding:0 1.5rem 4rem;animation:fadeUp .7s .3s ease both}
+.form-card{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:2.5rem;box-shadow:var(--glow),0 40px 80px rgba(0,0,0,0.5);position:relative;overflow:hidden}
+.form-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2),var(--accent3))}
+.form-title{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:700;margin-bottom:.3rem}
+.form-subtitle{color:var(--muted);font-size:.9rem;margin-bottom:2rem}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+.field{display:flex;flex-direction:column;gap:.5rem}
+label{font-size:.78rem;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+input[type=number],select{background:var(--surface2);border:1px solid rgba(255,255,255,0.07);border-radius:12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:1rem;padding:.85rem 1rem;outline:none;transition:border-color .2s,box-shadow .2s;width:100%;-moz-appearance:textfield}
+input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
+input[type=number]:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(124,58,237,0.2)}
+select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238882a8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 1rem center;padding-right:2.5rem}
+select option{background:#1c1c26}
+.toggles-section{margin-top:1.5rem}
+.toggles-label{font-size:.78rem;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:1rem;display:block}
+.toggles-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:.75rem}
+.toggle-item{display:flex;align-items:center;justify-content:space-between;background:var(--surface2);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:.75rem 1rem;cursor:pointer;transition:border-color .2s,background .2s;user-select:none}
+.toggle-item:hover{border-color:rgba(124,58,237,0.3)}
+.toggle-item.active{border-color:rgba(124,58,237,0.5);background:rgba(124,58,237,0.08)}
+.toggle-name{font-size:.88rem;font-weight:500;display:flex;align-items:center;gap:.4rem}
+.switch{position:relative;width:38px;height:22px;flex-shrink:0}
+.switch input{opacity:0;width:0;height:0}
+.slider{position:absolute;inset:0;background:rgba(255,255,255,0.1);border-radius:999px;transition:background .25s;cursor:pointer}
+.slider::before{content:'';position:absolute;width:16px;height:16px;left:3px;top:3px;background:white;border-radius:50%;transition:transform .25s cubic-bezier(.34,1.56,.64,1);box-shadow:0 1px 4px rgba(0,0,0,0.4)}
+.switch input:checked+.slider{background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.switch input:checked+.slider::before{transform:translateX(16px)}
+.divider{height:1px;background:rgba(255,255,255,0.06);margin:2rem 0}
+.submit-btn{width:100%;padding:1.1rem;background:linear-gradient(135deg,var(--accent) 0%,#6d28d9 50%,var(--accent2) 100%);border:none;border-radius:14px;color:white;font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;letter-spacing:.02em;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 20px rgba(124,58,237,0.4);margin-top:1.5rem;position:relative}
+.submit-btn:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(124,58,237,0.6)}
+.submit-btn:active{transform:translateY(0)}
+.btn-inner{display:flex;align-items:center;justify-content:center;gap:.5rem}
+.result-box{display:none;margin-top:1.5rem;background:linear-gradient(135deg,rgba(6,182,212,0.1),rgba(124,58,237,0.1));border:1px solid rgba(6,182,212,0.3);border-radius:16px;padding:1.5rem 2rem;text-align:center;animation:popIn .4s cubic-bezier(.34,1.56,.64,1) both}
+.result-box.show{display:block}
+.result-label{font-size:.8rem;color:var(--accent2);text-transform:uppercase;letter-spacing:.1em;font-weight:600;margin-bottom:.5rem}
+.result-price{font-family:'Syne',sans-serif;font-size:3rem;font-weight:800;background:linear-gradient(135deg,var(--accent2),var(--accent3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-.03em}
+.result-note{font-size:.85rem;color:var(--muted);margin-top:.4rem}
+.result-error{color:#f87171;font-size:.95rem}
+.loading{display:none;align-items:center;justify-content:center;gap:.5rem;margin-top:1.5rem;color:var(--muted);font-size:.9rem}
+.loading.show{display:flex}
+.spinner{width:20px;height:20px;border:2px solid rgba(124,58,237,0.3);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
+
+/* LISTINGS SECTION */
+.listings-section{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:0 1.5rem 6rem}
+.listings-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;flex-wrap:gap}
+.listings-header h2{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;letter-spacing:-.02em}
+.listings-header h2 span{color:var(--accent2)}
+.listings-count{background:rgba(6,182,212,0.15);border:1px solid rgba(6,182,212,0.3);color:var(--accent2);font-size:.8rem;font-weight:600;padding:.3rem .8rem;border-radius:999px}
+.listings-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.2rem}
+.listing-card{background:var(--surface);border:1px solid rgba(255,255,255,0.06);border-radius:18px;overflow:hidden;transition:transform .25s,border-color .25s,box-shadow .25s;animation:fadeUp .5s ease both}
+.listing-card:hover{transform:translateY(-4px);border-color:rgba(124,58,237,0.4);box-shadow:0 12px 40px rgba(124,58,237,0.15)}
+.card-img{width:100%;height:180px;object-fit:cover;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:3rem;position:relative;overflow:hidden}
+.card-img img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.listing-card:hover .card-img img{transform:scale(1.05)}
+.card-img-placeholder{width:100%;height:180px;background:linear-gradient(135deg,rgba(124,58,237,0.15),rgba(6,182,212,0.1));display:flex;align-items:center;justify-content:center;font-size:2.5rem}
+.card-body{padding:1.2rem}
+.card-province{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2);margin-bottom:.4rem}
+.card-title{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:700;margin-bottom:.8rem;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.card-stats{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.8rem}
+.stat-pill{background:var(--surface2);border-radius:8px;padding:.25rem .6rem;font-size:.75rem;color:var(--muted);font-weight:500}
+.card-features{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1rem}
+.feat-tag{font-size:.7rem;padding:.2rem .5rem;border-radius:6px;font-weight:500}
+.feat-tag.on{background:rgba(124,58,237,0.15);color:#c4b5fd;border:1px solid rgba(124,58,237,0.25)}
+.card-footer{display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(255,255,255,0.05);padding-top:.8rem}
+.card-price{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;color:var(--accent3)}
+.card-price span{font-size:.75rem;font-weight:400;color:var(--muted);font-family:'DM Sans',sans-serif}
+.no-listings{text-align:center;color:var(--muted);padding:3rem;font-size:.95rem}
+.features-strip{position:relative;z-index:1;display:flex;justify-content:center;gap:2rem;padding:0 2rem 4rem;flex-wrap:wrap}
+.feature-pill{display:flex;align-items:center;gap:.5rem;background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:.6rem 1.2rem;font-size:.85rem;color:var(--muted)}
+.feature-pill span{color:var(--accent2)}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+@keyframes popIn{from{opacity:0;transform:scale(0.9)}to{opacity:1;transform:scale(1)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:600px){nav{padding:1rem 1.5rem}.hero{padding:4rem 1.5rem 2.5rem}.form-card{padding:1.5rem}.form-grid{grid-template-columns:1fr}.toggles-grid{grid-template-columns:1fr 1fr}.result-price{font-size:2.2rem}.listings-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="logo">
+    <div class="logo-icon">🏠</div>
+    NEST<span>IFY</span>
+  </a>
+  <div class="badge">✦ Predicción IA</div>
+</nav>
+
+<section class="hero">
+  <div class="hero-tag">✦ Powered by Machine Learning</div>
+  <h1>Tu próximo hogar,<br><span class="gradient">al precio justo</span></h1>
+  <p>Descubre el precio estimado de alquiler de cualquier apartamento en España con nuestra IA en tiempo real.</p>
+</section>
+
+<div class="form-wrapper">
+  <div class="form-card">
+    <div class="form-title">Configura tu apartamento</div>
+    <div class="form-subtitle">Rellena los datos y obtén una estimación al instante</div>
+
+    <div class="form-grid">
+      <div class="field">
+        <label>📐 Superficie (m²)</label>
+        <input type="number" id="surface" min="10" max="500" placeholder="ej. 80" value="80">
+      </div>
+      <div class="field">
+        <label>🛏 Habitaciones</label>
+        <input type="number" id="bedrooms" min="1" max="10" placeholder="ej. 3" value="3">
+      </div>
+      <div class="field">
+        <label>🚿 Baños</label>
+        <input type="number" id="restrooms" min="1" max="5" placeholder="ej. 1" value="1">
+      </div>
+      <div class="field">
+        <label>📍 Provincia</label>
+        <select id="location_name">
+          <option value="">Selecciona provincia...</option>
+          <option>A Coruña</option><option>Alacant</option><option>Albacete</option>
+          <option>Almería</option><option>Araba</option><option>Asturias</option>
+          <option>Badajoz</option><option>Barcelona</option><option>Bizkaia</option>
+          <option>Burgos</option><option>Cantabria</option><option>Castelló</option>
+          <option>Ciudad Real</option><option>Cuenca</option><option>Cáceres</option>
+          <option>Cádiz</option><option>Córdoba</option><option>Gipuzkoa</option>
+          <option>Girona</option><option>Granada</option><option>Guadalajara</option>
+          <option>Huelva</option><option>Huesca</option><option>Illes Balears</option>
+          <option>Jaén</option><option>La Rioja</option><option>Las Palmas</option>
+          <option>León</option><option>Lleida</option><option>Lugo</option>
+          <option>Madrid</option><option>Murcia</option><option>Málaga</option>
+          <option>Navarra</option><option>Ourense</option><option>Palencia</option>
+          <option>Pontevedra</option><option>Salamanca</option>
+          <option>Santa Cruz de Tenerife</option><option>Segovia</option>
+          <option>Sevilla</option><option>Soria</option><option>Tarragona</option>
+          <option>Teruel</option><option>Toledo</option><option>Valencia</option>
+          <option>Valladolid</option><option>Zamora</option><option>Zaragoza</option>
+          <option>Ávila</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="toggles-section">
+      <span class="toggles-label">✦ Características del piso</span>
+      <div class="toggles-grid">
+        <div class="toggle-item active" data-key="ascensor">
+          <span class="toggle-name">🛗 Ascensor</span>
+          <label class="switch"><input type="checkbox" checked onchange="syncToggle(this)"><span class="slider"></span></label>
+        </div>
+        <div class="toggle-item active" data-key="calefaccion">
+          <span class="toggle-name">🔥 Calefacción</span>
+          <label class="switch"><input type="checkbox" checked onchange="syncToggle(this)"><span class="slider"></span></label>
+        </div>
+        <div class="toggle-item" data-key="piscina">
+          <span class="toggle-name">🏊 Piscina</span>
+          <label class="switch"><input type="checkbox" onchange="syncToggle(this)"><span class="slider"></span></label>
+        </div>
+        <div class="toggle-item" data-key="aire_acondicionado">
+          <span class="toggle-name">❄️ Aire acond.</span>
+          <label class="switch"><input type="checkbox" onchange="syncToggle(this)"><span class="slider"></span></label>
+        </div>
+        <div class="toggle-item active" data-key="terraza">
+          <span class="toggle-name">🌿 Terraza</span>
+          <label class="switch"><input type="checkbox" checked onchange="syncToggle(this)"><span class="slider"></span></label>
+        </div>
+        <div class="toggle-item" data-key="balcon">
+          <span class="toggle-name">🌇 Balcón</span>
+          <label class="switch"><input type="checkbox" onchange="syncToggle(this)"><span class="slider"></span></label>
+        </div>
+        <div class="toggle-item" data-key="parking">
+          <span class="toggle-name">🚗 Parking</span>
+          <label class="switch"><input type="checkbox" onchange="syncToggle(this)"><span class="slider"></span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <button class="submit-btn" onclick="getPrediction()">
+      <div class="btn-inner"><span>✦</span><span>Calcular precio estimado</span><span>→</span></div>
+    </button>
+
+    <div class="loading" id="loading">
+      <div class="spinner"></div> Calculando con IA...
+    </div>
+
+    <div class="result-box" id="resultBox"></div>
+  </div>
+</div>
+
+<!-- LISTINGS -->
+<div class="listings-section" id="listingsSection" style="display:none">
+  <div class="listings-header" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem">
+    <h2>Pisos disponibles en <span id="listingsProvince">—</span></h2>
+    <div class="listings-count" id="listingsCount"></div>
+  </div>
+  <div class="listings-grid" id="listingsGrid"></div>
+</div>
+
+<div class="features-strip">
+  <div class="feature-pill"><span>⚡</span> Respuesta instantánea</div>
+  <div class="feature-pill"><span>🧠</span> Modelo XGBoost entrenado</div>
+  <div class="feature-pill"><span>📊</span> 50 provincias de España</div>
+  <div class="feature-pill"><span>🔒</span> Sin registro</div>
+</div>
+
+<script>
+const LISTINGS = {"A Coruña":[{"title":"Piso de alquiler en A Coruña Capital","surface":80,"bedrooms":2,"restrooms":2,"price":830,"features":"2 habs.,2 baños,80 m²,6ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Avenida de Figueroa, 10, Santiago de Compostela","surface":96,"bedrooms":3,"restrooms":2,"price":800,"features":"3 habs.,2 baños,96 m²,1ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Rúa San Andrés, Centro - Juan Flórez - Plaza Pontevedra","surface":65,"bedrooms":2,"restrooms":2,"price":850,"features":"2 habs.,2 baños,65 m²,Ascensor,Calefacción","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Calle Ulla, Santiago de Compostela","surface":100,"bedrooms":4,"restrooms":2,"price":800,"features":"4 habs.,2 baños,100 m²,4ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false}],"Alacant":[{"title":"Piso de alquiler en Alicante / Alacant","surface":106,"bedrooms":3,"restrooms":2,"price":800,"features":"3 habs.,2 baños,106 m²,6ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Casa adosada de alquiler en Santa Pola","surface":120,"bedrooms":3,"restrooms":3,"price":700,"features":"3 habs.,3 baños,120 m²,Terraza,Piscina","ascensor":false,"piscina":true,"terraza":true,"parking":false},{"title":"Apartamento de alquiler en Plaza Grua  Nº 8, Dénia","surface":50,"bedrooms":2,"restrooms":1,"price":400,"features":"2 habs.,1 baño,50 m²,2ª Planta,Piscina","ascensor":false,"piscina":true,"terraza":false,"parking":false},{"title":"Dúplex de alquiler en Elda","surface":910,"bedrooms":2,"restrooms":3,"price":600,"features":"2 habs.,3 baños,910 m²,1ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false}],"Albacete":[{"title":"Piso de alquiler en Avenida de Los Reyes Católicos, Villarrobledo","surface":75,"bedrooms":2,"restrooms":1,"price":400,"features":"2 habs.,1 baño,75 m²,Ascensor,Calefacción","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Fátima","surface":74,"bedrooms":3,"restrooms":1,"price":500,"features":"3 habs.,1 baño,74 m²,1ª Planta,Calefacción","ascensor":false,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Imaginalia - Llanos del Águila","surface":93,"bedrooms":3,"restrooms":2,"price":700,"features":"3 habs.,2 baños,93 m²,4ª Planta,Piscina","ascensor":false,"piscina":true,"terraza":false,"parking":false},{"title":"Apartamento de alquiler en De Jaen, Santa Teresa - Vereda","surface":84,"bedrooms":1,"restrooms":1,"price":515,"features":"1 hab.,1 baño,84 m²,4ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false}],"Almería":[{"title":"Apartamento de alquiler en Plaza Paseo Maritimo, Retamar","surface":56,"bedrooms":2,"restrooms":1,"price":500,"features":"2 habs.,1 baño,56 m²,Bajos,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Casa o chalet de alquiler en Malvavisco, 4, La Cañada de San Urbano","surface":60,"bedrooms":2,"restrooms":1,"price":440,"features":"2 habs.,1 baño,60 m²,Terraza","ascensor":false,"piscina":false,"terraza":true,"parking":false},{"title":"Piso de alquiler en Calle Real, Roquetas de Mar","surface":112,"bedrooms":3,"restrooms":1,"price":600,"features":"3 habs.,1 baño,112 m²,2ª Planta,Terraza","ascensor":false,"piscina":false,"terraza":true,"parking":false},{"title":"Apartamento de alquiler en Plaza González Méndez, El Ejido","surface":50,"bedrooms":1,"restrooms":1,"price":280,"features":"1 hab.,1 baño,50 m²,Bajos,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false}],"Araba":[{"title":"Piso de alquiler en Plaza Los Huetos, Casco Viejo","surface":100,"bedrooms":3,"restrooms":2,"price":900,"features":"3 habs.,2 baños,100 m²,5ª Planta,Terraza","ascensor":false,"piscina":false,"terraza":true,"parking":false},{"title":"Piso de alquiler en Calle San Prudencio, Oyón-Oion","surface":85,"bedrooms":3,"restrooms":1,"price":500,"features":"3 habs.,1 baño,85 m²,2ª Planta,Terraza","ascensor":false,"piscina":false,"terraza":true,"parking":false},{"title":"Piso de alquiler en Vitoria - Gasteiz","surface":57,"bedrooms":2,"restrooms":1,"price":690,"features":"2 habs.,1 baño,57 m²,4ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Olaguibel, Judimendi","surface":100,"bedrooms":3,"restrooms":1,"price":930,"features":"3 habs.,1 baño,100 m²,Ascensor,Terraza","ascensor":true,"piscina":false,"terraza":true,"parking":false}],"Asturias":[{"title":"Piso de alquiler en Habana , HUCA - La Cadellada","surface":70,"bedrooms":2,"restrooms":2,"price":550,"features":"2 habs.,2 baños,70 m²,2ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Calle Severo Ochoa, Castrillón","surface":80,"bedrooms":3,"restrooms":1,"price":450,"features":"3 habs.,1 baño,80 m²,Ascensor,Terraza","ascensor":true,"piscina":false,"terraza":true,"parking":false},{"title":"Piso de alquiler en Gijón","surface":103,"bedrooms":3,"restrooms":2,"price":1050,"features":"3 habs.,2 baños,103 m²,Ascensor,Calefacción","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Gijón - Bailen, Gijón","surface":69,"bedrooms":3,"restrooms":2,"price":550,"features":"3 habs.,2 baños,69 m²,4ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false}],"Ávila":[{"title":"Piso de alquiler en Calle Ferrocarril, Ávila Capital","surface":-1,"bedrooms":2,"restrooms":1,"price":550,"features":"2 habs.,1 baño,Parking,Calefacción,Aire acondicionado","ascensor":false,"piscina":false,"terraza":false,"parking":true},{"title":"Piso de alquiler en Plaza Guadarrama, Navaluenga","surface":100,"bedrooms":3,"restrooms":2,"price":450,"features":"3 habs.,2 baños,100 m²,Bajos,Calefacción","ascensor":false,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Sur","surface":69,"bedrooms":3,"restrooms":1,"price":500,"features":"3 habs.,1 baño,69 m²,Calefacción","ascensor":false,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Sur","surface":86,"bedrooms":3,"restrooms":1,"price":425,"features":"3 habs.,1 baño,86 m²,3ª Planta,Terraza","ascensor":false,"piscina":false,"terraza":true,"parking":false}],"Badajoz":[{"title":"Piso de alquiler en Calle Comarca de las Hurdes, Mérida","surface":50,"bedrooms":1,"restrooms":1,"price":420,"features":"1 hab.,1 baño,50 m²,Ascensor,Parking","ascensor":true,"piscina":false,"terraza":false,"parking":true},{"title":"Piso de alquiler en Avenida Diego Hidalgodura, Los Santos de Maimona","surface":57,"bedrooms":1,"restrooms":1,"price":380,"features":"1 hab.,1 baño,57 m²,Calefacción,Aire acondicionado","ascensor":false,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Calle Prim, Badajoz Capital","surface":100,"bedrooms":4,"restrooms":2,"price":850,"features":"4 habs.,2 baños,100 m²,2ª Planta","ascensor":false,"piscina":false,"terraza":false,"parking":false},{"title":"Estudio de alquiler en Plaza Avenida de Pardaleras, Badajoz Capital","surface":50,"bedrooms":1,"restrooms":1,"price":475,"features":"1 hab.,1 baño,50 m²,2ª Planta","ascensor":false,"piscina":false,"terraza":false,"parking":false}],"Barcelona":[{"title":"Piso de alquiler en Cardenal Reig,  Barcelona Capital","surface":80,"bedrooms":3,"restrooms":1,"price":1300,"features":"3 habs.,1 baño,80 m²,6ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Sant Feliu de Codines","surface":80,"bedrooms":2,"restrooms":1,"price":675,"features":"2 habs.,1 baño,80 m²,Bajos,Calefacción","ascensor":false,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Via Augusta, 59,  Barcelona Capital","surface":78,"bedrooms":2,"restrooms":2,"price":3320,"features":"2 habs.,2 baños,78 m²,5ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Carrer de Moragas, 5,  Barcelona Capital","surface":52,"bedrooms":1,"restrooms":1,"price":950,"features":"1 hab.,1 baño,52 m²,1ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false}],"Bizkaia":[{"title":"Piso de alquiler en Calle Lezeaga, Basurtu - Zorrotza","surface":75,"bedrooms":2,"restrooms":2,"price":850,"features":"2 habs.,2 baños,75 m²,5ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Lekuona Margolariaren Etorbidea, Basurtu - Zorrotza","surface":80,"bedrooms":3,"restrooms":2,"price":950,"features":"3 habs.,2 baños,80 m²,1ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Getxo","surface":90,"bedrooms":2,"restrooms":2,"price":1300,"features":"2 habs.,2 baños,90 m²,1ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Abando - Albia","surface":100,"bedrooms":3,"restrooms":2,"price":1100,"features":"3 habs.,2 baños,100 m²,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false}],"Burgos":[{"title":"Apartamento de alquiler en Burgos Capital","surface":76,"bedrooms":2,"restrooms":2,"price":650,"features":"2 habs.,2 baños,76 m²,Ascensor,Terraza","ascensor":true,"piscina":false,"terraza":true,"parking":false},{"title":"Apartamento de alquiler en Calle Travesía de Mercado, Burgos Capital","surface":70,"bedrooms":2,"restrooms":2,"price":750,"features":"2 habs.,2 baños,70 m²,Principal,Parking","ascensor":false,"piscina":false,"terraza":false,"parking":true},{"title":"Apartamento de alquiler en Centro","surface":66,"bedrooms":2,"restrooms":1,"price":500,"features":"2 habs.,1 baño,66 m²,Bajos,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Burgos Capital","surface":147,"bedrooms":3,"restrooms":2,"price":650,"features":"3 habs.,2 baños,147 m²,2ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false}],"Cáceres":[{"title":"Piso de alquiler en Centro","surface":70,"bedrooms":3,"restrooms":1,"price":380,"features":"3 habs.,1 baño,70 m²,2ª Planta","ascensor":false,"piscina":false,"terraza":false,"parking":false},{"title":"Casa o chalet de alquiler en Plaza Tomas Avila, Galisteo","surface":78,"bedrooms":1,"restrooms":1,"price":300,"features":"1 hab.,1 baño,78 m²,Calefacción","ascensor":false,"piscina":false,"terraza":false,"parking":false},{"title":"Apartamento de alquiler en Calle Obispo Segura Sáez, Cáceres Capital","surface":65,"bedrooms":2,"restrooms":1,"price":400,"features":"2 habs.,1 baño,65 m²,4ª Planta,Terraza","ascensor":false,"piscina":false,"terraza":true,"parking":false},{"title":"Apartamento de alquiler en Calle San Julián, Plasencia","surface":40,"bedrooms":1,"restrooms":1,"price":370,"features":"1 hab.,1 baño,40 m²,Bajos,Aire acondicionado","ascensor":false,"piscina":false,"terraza":false,"parking":false}],"Cádiz":[{"title":"Piso de alquiler en Avenida Jesús Sánchez Madero Jesuli, Algeciras","surface":70,"bedrooms":2,"restrooms":1,"price":450,"features":"2 habs.,1 baño,70 m²,Ascensor,Terraza","ascensor":true,"piscina":false,"terraza":true,"parking":false},{"title":"Casa adosada de alquiler en El Puerto de Santa María","surface":150,"bedrooms":3,"restrooms":3,"price":1400,"features":"3 habs.,3 baños,150 m²,Terraza,Calefacción","ascensor":false,"piscina":false,"terraza":true,"parking":false},{"title":"Piso de alquiler en Jerez de la Frontera","surface":48,"bedrooms":2,"restrooms":1,"price":450,"features":"2 habs.,1 baño,48 m²,3ª Planta","ascensor":false,"piscina":false,"terraza":false,"parking":false},{"title":"Casa adosada de alquiler en Chiclana de la Frontera","surface":92,"bedrooms":2,"restrooms":2,"price":1600,"features":"2 habs.,2 baños,92 m²,Terraza","ascensor":false,"piscina":false,"terraza":true,"parking":false}],"Cantabria":[{"title":"Piso de alquiler en Avenida de Los Castros, Santander","surface":105,"bedrooms":3,"restrooms":2,"price":800,"features":"3 habs.,2 baños,105 m²,Ascensor,Parking","ascensor":true,"piscina":false,"terraza":false,"parking":true},{"title":"Piso de alquiler en Calle Lealtad, Centro - Ayuntamiento","surface":60,"bedrooms":1,"restrooms":1,"price":600,"features":"1 hab.,1 baño,60 m²,Ascensor,Calefacción","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Guevara , 24, Centro - Ayuntamiento","surface":80,"bedrooms":2,"restrooms":2,"price":700,"features":"2 habs.,2 baños,80 m²,1ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Mortera - Barrio el Pozo de la Torre, Piélagos","surface":90,"bedrooms":3,"restrooms":2,"price":650,"features":"3 habs.,2 baños,90 m²,Terraza,Calefacción","ascensor":false,"piscina":false,"terraza":true,"parking":false}],"Castelló":[{"title":"Piso de alquiler en Rafael Balaguer, Benicasim / Benicàssim","surface":90,"bedrooms":2,"restrooms":2,"price":3500,"features":"2 habs.,2 baños,90 m²,6ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Oeste","surface":51,"bedrooms":1,"restrooms":1,"price":575,"features":"1 hab.,1 baño,51 m²,Ascensor,Calefacción","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Benicarló","surface":60,"bedrooms":2,"restrooms":1,"price":300,"features":"2 habs.,1 baño,60 m²,Ascensor,Terraza","ascensor":true,"piscina":false,"terraza":true,"parking":false},{"title":"Piso de alquiler en Vila-real","surface":100,"bedrooms":3,"restrooms":2,"price":550,"features":"3 habs.,2 baños,100 m²,1ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false}],"Ciudad Real":[{"title":"Piso de alquiler en Calle del Lirio, El Perchel","surface":137,"bedrooms":4,"restrooms":2,"price":800,"features":"4 habs.,2 baños,137 m²,Ascensor,Terraza","ascensor":true,"piscina":false,"terraza":true,"parking":false},{"title":"Loft de alquiler en Calle Estanislao Cabanillas, 1, Almadén","surface":50,"bedrooms":1,"restrooms":1,"price":200,"features":"1 hab.,1 baño,50 m²,Balcón,Calefacción","ascensor":false,"piscina":false,"terraza":false,"parking":false},{"title":"Ático de alquiler en Valdepeñas","surface":55,"bedrooms":1,"restrooms":1,"price":370,"features":"1 hab.,1 baño,55 m²,4ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Plaza Avda de Lalibertad 109, Almadén","surface":35,"bedrooms":1,"restrooms":1,"price":200,"features":"1 hab.,1 baño,35 m²,1ª Planta,Terraza","ascensor":false,"piscina":false,"terraza":true,"parking":false}],"Córdoba":[{"title":"Piso de alquiler en Sur","surface":68,"bedrooms":2,"restrooms":1,"price":550,"features":"2 habs.,1 baño,68 m²,1ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Loft de alquiler en  Córdoba Capital","surface":55,"bedrooms":-1,"restrooms":-1,"price":550,"features":"55 m²,Calefacción","ascensor":false,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Poniente-Sur","surface":55,"bedrooms":2,"restrooms":1,"price":550,"features":"2 habs.,1 baño,55 m²,1ª Planta,Aire acondicionado","ascensor":false,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Centro","surface":50,"bedrooms":1,"restrooms":1,"price":540,"features":"1 hab.,1 baño,50 m²,Balcón,Calefacción","ascensor":false,"piscina":false,"terraza":false,"parking":false}],"Cuenca":[{"title":"Piso de alquiler en Calle de Ramón y Cajal, 17, Cuenca Capital","surface":105,"bedrooms":4,"restrooms":2,"price":800,"features":"4 habs.,2 baños,105 m²,Ascensor,Calefacción","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Calle Senda Larga, El Provencio","surface":70,"bedrooms":2,"restrooms":1,"price":300,"features":"2 habs.,1 baño,70 m²,Calefacción,Aire acondicionado","ascensor":false,"piscina":false,"terraza":false,"parking":false},{"title":"Apartamento de alquiler en Las Pedroñeras","surface":50,"bedrooms":2,"restrooms":1,"price":320,"features":"2 habs.,1 baño,50 m²,Bajos","ascensor":false,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Avenida Rey Juan Carlos I, Tarancón","surface":100,"bedrooms":2,"restrooms":2,"price":500,"features":"2 habs.,2 baños,100 m²,Ascensor,Calefacción","ascensor":true,"piscina":false,"terraza":false,"parking":false}],"Gipuzkoa":[{"title":"Ático de alquiler en Astigarraga","surface":85,"bedrooms":3,"restrooms":2,"price":1200,"features":"3 habs.,2 baños,85 m²,+15 Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Calle Luis de Uranzu, Irun","surface":65,"bedrooms":2,"restrooms":1,"price":800,"features":"2 habs.,1 baño,65 m²,4ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Donostia - San Sebastián","surface":110,"bedrooms":3,"restrooms":2,"price":1600,"features":"3 habs.,2 baños,110 m²,1ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Matia Kalea, 3, Donostia - San Sebastián","surface":80,"bedrooms":2,"restrooms":1,"price":1050,"features":"2 habs.,1 baño,80 m²,3ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false}],"Girona":[{"title":"Piso de alquiler en Riells i Viabrea","surface":60,"bedrooms":2,"restrooms":1,"price":560,"features":"2 habs.,1 baño,60 m²,2ª Planta,Calefacción","ascensor":false,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Sant Martí de Llémena","surface":90,"bedrooms":2,"restrooms":1,"price":1050,"features":"2 habs.,1 baño,90 m²,1ª Planta,Terraza","ascensor":false,"piscina":false,"terraza":true,"parking":false},{"title":"Piso de alquiler en Carrer Dels Grecs, Roses","surface":90,"bedrooms":2,"restrooms":2,"price":950,"features":"2 habs.,2 baños,90 m²,1ª Planta,Parking","ascensor":false,"piscina":false,"terraza":false,"parking":true},{"title":"Casa o chalet de alquiler en Carrer Nord, Urús","surface":210,"bedrooms":4,"restrooms":2,"price":3100,"features":"4 habs.,2 baños,210 m²,Calefacción","ascensor":false,"piscina":false,"terraza":false,"parking":false}],"Granada":[{"title":"Piso de alquiler en Armilla","surface":85,"bedrooms":3,"restrooms":2,"price":560,"features":"3 habs.,2 baños,85 m²,Balcón","ascensor":false,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Plaza Santa Ana, Centro","surface":80,"bedrooms":2,"restrooms":1,"price":850,"features":"2 habs.,1 baño,80 m²,Entresuelo,Calefacción","ascensor":false,"piscina":false,"terraza":false,"parking":false},{"title":"Apartamento de alquiler en  Granada Capital","surface":73,"bedrooms":2,"restrooms":1,"price":750,"features":"2 habs.,1 baño,73 m²,Terraza,Piscina","ascensor":false,"piscina":true,"terraza":true,"parking":false},{"title":"Ático de alquiler en San Pedro, Atarfe","surface":100,"bedrooms":3,"restrooms":1,"price":570,"features":"3 habs.,1 baño,100 m²,Ascensor,Terraza","ascensor":true,"piscina":false,"terraza":true,"parking":false}],"Guadalajara":[{"title":"Casa o chalet de alquiler en Camino de Pioz, Aranzueque","surface":165,"bedrooms":4,"restrooms":3,"price":825,"features":"4 habs.,3 baños,165 m²,Piscina,Calefacción","ascensor":false,"piscina":true,"terraza":false,"parking":false},{"title":"Apartamento de alquiler en Plaza Tirso de Molina, Guadalajara Capital","surface":110,"bedrooms":1,"restrooms":2,"price":280,"features":"1 hab.,2 baños,110 m²,1ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Casa o chalet de alquiler en Calle el Madroño, Loranca de Tajuña","surface":140,"bedrooms":3,"restrooms":2,"price":700,"features":"3 habs.,2 baños,140 m²,Terraza,Calefacción","ascensor":false,"piscina":false,"terraza":true,"parking":false},{"title":"Piso de alquiler en Doctor Fernandez Iparraguirre, Plan Sur - Amistad","surface":130,"bedrooms":3,"restrooms":2,"price":1200,"features":"3 habs.,2 baños,130 m²,Ascensor,Parking","ascensor":true,"piscina":false,"terraza":false,"parking":true}],"Huelva":[{"title":"Piso de alquiler en Plaza a Consultar, Valverde del Camino","surface":70,"bedrooms":2,"restrooms":2,"price":-1,"features":"2 habs.,2 baños,70 m²,1ª Planta,Terraza","ascensor":false,"piscina":false,"terraza":true,"parking":false},{"title":"Apartamento de alquiler en Calle Virgen Montemayor, 6, Tres Ventanas","surface":39,"bedrooms":1,"restrooms":1,"price":425,"features":"1 hab.,1 baño,39 m²,Principal","ascensor":false,"piscina":false,"terraza":false,"parking":false},{"title":"Apartamento de alquiler en Plaza Ubr la Retama N 1 6b, Punta Umbría","surface":85,"bedrooms":2,"restrooms":1,"price":-1,"features":"2 habs.,1 baño,85 m²,6ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Apartamento de alquiler en Urbanización Pinares del Portil, El Portil","surface":60,"bedrooms":2,"restrooms":1,"price":400,"features":"2 habs.,1 baño,60 m²,Ascensor,Aire acondicionado","ascensor":true,"piscina":false,"terraza":false,"parking":false}],"Huesca":[{"title":"Piso de alquiler en Goya,  Huesca Capital","surface":40,"bedrooms":1,"restrooms":1,"price":380,"features":"1 hab.,1 baño,40 m²,3ª Planta,Calefacción","ascensor":false,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Calle San Jorge, San José","surface":80,"bedrooms":3,"restrooms":1,"price":425,"features":"3 habs.,1 baño,80 m²,Ascensor,Terraza","ascensor":true,"piscina":false,"terraza":true,"parking":false},{"title":"Piso de alquiler en Paseo de Ramón y Cajal,  Huesca Capital","surface":72,"bedrooms":3,"restrooms":1,"price":680,"features":"3 habs.,1 baño,72 m²,Ascensor,Balcón","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Casa adosada de alquiler en Plaza la Iglesia, Tolva","surface":-1,"bedrooms":1,"restrooms":1,"price":-1,"features":"1 hab.,1 baño","ascensor":false,"piscina":false,"terraza":false,"parking":false}],"Illes Balears":[{"title":"Casa adosada de alquiler en Manacor-porto Cristo, Manacor","surface":65,"bedrooms":1,"restrooms":1,"price":1100,"features":"1 hab.,1 baño,65 m²,Parking,Terraza","ascensor":false,"piscina":false,"terraza":true,"parking":true},{"title":"Casa o chalet de alquiler en Carrer Major, Maria de la Salut","surface":380,"bedrooms":4,"restrooms":3,"price":1900,"features":"4 habs.,3 baños,380 m²,Terraza,Piscina","ascensor":false,"piscina":true,"terraza":true,"parking":false},{"title":"Apartamento de alquiler en Calvià","surface":56,"bedrooms":1,"restrooms":1,"price":950,"features":"1 hab.,1 baño,56 m²,5ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Carrer D'en Calders,  Palma de Mallorca","surface":104,"bedrooms":2,"restrooms":2,"price":1600,"features":"2 habs.,2 baños,104 m²,Entresuelo,Terraza","ascensor":false,"piscina":false,"terraza":true,"parking":false}],"Jaén":[{"title":"Ático de alquiler en San Ildefonso - Catedral","surface":90,"bedrooms":3,"restrooms":1,"price":650,"features":"3 habs.,1 baño,90 m²,6ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Canalejas, Linares","surface":36,"bedrooms":1,"restrooms":1,"price":325,"features":"1 hab.,1 baño,36 m²,2ª Planta,Balcón","ascensor":false,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Plaza Virgen la Antigua, Linares","surface":70,"bedrooms":1,"restrooms":2,"price":380,"features":"1 hab.,2 baños,70 m²,2ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Calle Turriegel, La Carolina","surface":122,"bedrooms":3,"restrooms":1,"price":-1,"features":"3 habs.,1 baño,122 m²,Balcón,Aire acondicionado","ascensor":false,"piscina":false,"terraza":false,"parking":false}],"La Rioja":[{"title":"Apartamento de alquiler en Casco Antiguo","surface":68,"bedrooms":2,"restrooms":1,"price":550,"features":"2 habs.,1 baño,68 m²,1ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en  Logroño","surface":116,"bedrooms":3,"restrooms":2,"price":975,"features":"3 habs.,2 baños,116 m²,Ascensor,Terraza","ascensor":true,"piscina":false,"terraza":true,"parking":false},{"title":"Piso de alquiler en Logroño - Calle Marqués de Murrieta, Oeste","surface":81,"bedrooms":2,"restrooms":1,"price":550,"features":"2 habs.,1 baño,81 m²,6ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Avenida Lope de Vega,  Logroño","surface":45,"bedrooms":1,"restrooms":1,"price":530,"features":"1 hab.,1 baño,45 m²,Terraza,Piscina","ascensor":false,"piscina":true,"terraza":true,"parking":false}],"Las Palmas":[{"title":"Piso de alquiler en Sagasta, Isleta - Puerto - Guanarteme","surface":60,"bedrooms":2,"restrooms":2,"price":700,"features":"2 habs.,2 baños,60 m²,5ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Casa o chalet de alquiler en Avenida Touroperador Neckermann, San Bartolomé de Tirajana","surface":40,"bedrooms":1,"restrooms":2,"price":800,"features":"1 hab.,2 baños,40 m²,Bajos,Terraza","ascensor":false,"piscina":false,"terraza":true,"parking":false},{"title":"Piso de alquiler en Lomo San Lázaro, Las Palmas de Gran Canaria","surface":94,"bedrooms":2,"restrooms":2,"price":750,"features":"2 habs.,2 baños,94 m²,Ascensor,Parking","ascensor":true,"piscina":false,"terraza":false,"parking":true},{"title":"Apartamento de alquiler en Avenida Río Piedra, Mogán","surface":60,"bedrooms":1,"restrooms":1,"price":850,"features":"1 hab.,1 baño,60 m²,1ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false}],"León":[{"title":"Piso de alquiler en Plaza Mariano Andres (frente Universidad), León Capital","surface":75,"bedrooms":2,"restrooms":1,"price":430,"features":"2 habs.,1 baño,75 m²,3ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Padre Isla, León Capital","surface":107,"bedrooms":2,"restrooms":2,"price":700,"features":"2 habs.,2 baños,107 m²,5ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Apartamento de alquiler en Avenida Padre Isla, León Capital","surface":50,"bedrooms":1,"restrooms":1,"price":500,"features":"1 hab.,1 baño,50 m²,Ascensor,Terraza","ascensor":true,"piscina":false,"terraza":true,"parking":false},{"title":"Apartamento de alquiler en Calle Cascalería, Casco Antiguo","surface":81,"bedrooms":1,"restrooms":1,"price":650,"features":"1 hab.,1 baño,81 m²,Ascensor,Balcón","ascensor":true,"piscina":false,"terraza":false,"parking":false}],"Lleida":[{"title":"Piso de alquiler en Avinguda de Prat de la Riba,  Lleida Capital","surface":150,"bedrooms":4,"restrooms":2,"price":800,"features":"4 habs.,2 baños,150 m²,4ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Carrer Ferrer I Busquets, Mollerussa","surface":150,"bedrooms":5,"restrooms":2,"price":250,"features":"5 habs.,2 baños,150 m²,3ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Apartamento de alquiler en Carrer Camp de Mart,  Lleida Capital","surface":70,"bedrooms":1,"restrooms":1,"price":600,"features":"1 hab.,1 baño,70 m²,1ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Casa adosada de alquiler en Corbins","surface":150,"bedrooms":4,"restrooms":2,"price":795,"features":"4 habs.,2 baños,150 m²,Terraza,Balcón","ascensor":false,"piscina":false,"terraza":true,"parking":false}],"Lugo":[{"title":"Piso de alquiler en Lugo Capital","surface":100,"bedrooms":3,"restrooms":2,"price":790,"features":"3 habs.,2 baños,100 m²,7ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Apartamento de alquiler en Barrio Nogueiredo, 36, Barreiros","surface":55,"bedrooms":2,"restrooms":1,"price":600,"features":"2 habs.,1 baño,55 m²,Bajos,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Praza Santo Domingo, 18, Centro - Recinto Amurallado","surface":100,"bedrooms":3,"restrooms":1,"price":550,"features":"3 habs.,1 baño,100 m²,Ascensor,Calefacción","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Apartamento de alquiler en Rúa Otero Pedrayo, 7, Monforte de Lemos","surface":-1,"bedrooms":2,"restrooms":1,"price":-1,"features":"2 habs.,1 baño,Calefacción","ascensor":false,"piscina":false,"terraza":false,"parking":false}],"Madrid":[{"title":"Piso de alquiler en  Madrid Capital","surface":55,"bedrooms":1,"restrooms":1,"price":1100,"features":"1 hab.,1 baño,55 m²,Ascensor,Terraza","ascensor":true,"piscina":false,"terraza":true,"parking":false},{"title":"Piso de alquiler en Barrio de Salamanca","surface":182,"bedrooms":4,"restrooms":3,"price":2700,"features":"4 habs.,3 baños,182 m²,4ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Ático de alquiler en Travesía Doctor Varela, Alpedrete","surface":74,"bedrooms":2,"restrooms":1,"price":700,"features":"2 habs.,1 baño,74 m²,2ª Planta,Calefacción","ascensor":false,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Calle de José Marañón,  Madrid Capital","surface":115,"bedrooms":2,"restrooms":2,"price":2450,"features":"2 habs.,2 baños,115 m²,Bajos,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false}],"Málaga":[{"title":"Dúplex de alquiler en Conjunto el Mero, 9, Manilva","surface":90,"bedrooms":2,"restrooms":2,"price":3000,"features":"2 habs.,2 baños,90 m²,2ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Apartamento de alquiler en Torremolinos","surface":35,"bedrooms":1,"restrooms":1,"price":550,"features":"1 hab.,1 baño,35 m²,Bajos,Calefacción","ascensor":false,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Marbella","surface":112,"bedrooms":2,"restrooms":2,"price":1300,"features":"2 habs.,2 baños,112 m²,1ª Planta,Terraza","ascensor":false,"piscina":false,"terraza":true,"parking":false},{"title":"Estudio de alquiler en Calle Centro, Torremolinos","surface":30,"bedrooms":-1,"restrooms":1,"price":50,"features":"1 baño,30 m²,1ª Planta,Ascensor,Piscina","ascensor":true,"piscina":true,"terraza":false,"parking":false}],"Murcia":[{"title":"Planta baja de alquiler en Manuel Estiarte, Torre-Pacheco","surface":63,"bedrooms":2,"restrooms":1,"price":475,"features":"2 habs.,1 baño,63 m²,Ascensor,Terraza","ascensor":true,"piscina":false,"terraza":true,"parking":false},{"title":"Apartamento de alquiler en Plaza Islas Columbretes, Cartagena","surface":70,"bedrooms":2,"restrooms":1,"price":515,"features":"2 habs.,1 baño,70 m²,2ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Senda de Granada, 156, Norte","surface":80,"bedrooms":3,"restrooms":2,"price":850,"features":"3 habs.,2 baños,80 m²,Ascensor,Parking","ascensor":true,"piscina":false,"terraza":false,"parking":true},{"title":"Piso de alquiler en Calle San Juan,  Murcia Capital","surface":87,"bedrooms":3,"restrooms":1,"price":525,"features":"3 habs.,1 baño,87 m²,1ª Planta,Balcón","ascensor":false,"piscina":false,"terraza":false,"parking":false}],"Navarra":[{"title":"Piso de alquiler en Casco Antiguo","surface":117,"bedrooms":4,"restrooms":1,"price":790,"features":"4 habs.,1 baño,117 m²,3ª Planta,Balcón","ascensor":false,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Baja Navarra, 2º Ensanche","surface":50,"bedrooms":1,"restrooms":1,"price":750,"features":"1 hab.,1 baño,50 m²,6ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Casa o chalet de alquiler en Monte Malkaitz, Egüés","surface":301,"bedrooms":5,"restrooms":4,"price":2700,"features":"5 habs.,4 baños,301 m²,Terraza,Calefacción","ascensor":false,"piscina":false,"terraza":true,"parking":false},{"title":"Piso de alquiler en Calle de Benjamín de Tudela,  Pamplona / Iruña","surface":107,"bedrooms":3,"restrooms":2,"price":925,"features":"3 habs.,2 baños,107 m²,3ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false}],"Ourense":[{"title":"Apartamento de alquiler en Ventiun","surface":65,"bedrooms":2,"restrooms":2,"price":415,"features":"2 habs.,2 baños,65 m²,4ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Penaguillón, O Barco de Valdeorras","surface":95,"bedrooms":3,"restrooms":1,"price":300,"features":"3 habs.,1 baño,95 m²,2ª Planta,Calefacción","ascensor":false,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Calle Alarcon, Cortegada","surface":75,"bedrooms":2,"restrooms":1,"price":500,"features":"2 habs.,1 baño,75 m²,4ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Plaza Ramón Cabanillas, Ourense Capital","surface":110,"bedrooms":4,"restrooms":2,"price":650,"features":"4 habs.,2 baños,110 m²,6ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false}],"Palencia":[{"title":"Piso de alquiler en Calle Valverde, Palencia Capital","surface":70,"bedrooms":3,"restrooms":1,"price":430,"features":"3 habs.,1 baño,70 m²,5ª Planta,Calefacción","ascensor":false,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Magaz de Pisuerga","surface":78,"bedrooms":3,"restrooms":1,"price":-1,"features":"3 habs.,1 baño,78 m²,1ª Planta","ascensor":false,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Santiago - San Telmo","surface":65,"bedrooms":3,"restrooms":1,"price":375,"features":"3 habs.,1 baño,65 m²,5ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Apartamento de alquiler en Palencia Capital","surface":45,"bedrooms":1,"restrooms":1,"price":430,"features":"1 hab.,1 baño,45 m²,2ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false}],"Pontevedra":[{"title":"Piso de alquiler en Urzaiz, Vigo","surface":115,"bedrooms":4,"restrooms":2,"price":850,"features":"4 habs.,2 baños,115 m²,5ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Avenida de García Barbón, 60, Vigo","surface":70,"bedrooms":1,"restrooms":1,"price":720,"features":"1 hab.,1 baño,70 m²,Ascensor,Calefacción","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Casa o chalet de alquiler en Baiona","surface":-1,"bedrooms":44,"restrooms":44,"price":8990,"features":"44 habs.,44 baños,2ª Planta,Parking,Terraza","ascensor":false,"piscina":false,"terraza":true,"parking":true},{"title":"Piso de alquiler en Cesar Boente, Centro - Echegaray","surface":100,"bedrooms":3,"restrooms":2,"price":725,"features":"3 habs.,2 baños,100 m²,2ª Planta,Terraza","ascensor":false,"piscina":false,"terraza":true,"parking":false}],"Salamanca":[{"title":"Piso de alquiler en Calle Rúa Mayor, Salamanca Capital","surface":40,"bedrooms":1,"restrooms":1,"price":750,"features":"1 hab.,1 baño,40 m²,3ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Salamanca Capital","surface":155,"bedrooms":4,"restrooms":2,"price":1000,"features":"4 habs.,2 baños,155 m²,5ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Paseo de la Estacion, 12, Salamanca Capital","surface":80,"bedrooms":3,"restrooms":2,"price":700,"features":"3 habs.,2 baños,80 m²,1ª Planta","ascensor":false,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Avenida de Portugal, Salamanca Capital","surface":100,"bedrooms":3,"restrooms":2,"price":700,"features":"3 habs.,2 baños,100 m²,6ª Planta","ascensor":false,"piscina":false,"terraza":false,"parking":false}],"Santa Cruz de Tenerife":[{"title":"Apartamento de alquiler en Arona","surface":54,"bedrooms":1,"restrooms":1,"price":650,"features":"1 hab.,1 baño,54 m²,1ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Apartamento de alquiler en Calle Orion, Arona","surface":70,"bedrooms":2,"restrooms":1,"price":500,"features":"2 habs.,1 baño,70 m²,1ª Planta,Terraza","ascensor":false,"piscina":false,"terraza":true,"parking":false},{"title":"Apartamento de alquiler en Petunia, Santiago del Teide","surface":95,"bedrooms":2,"restrooms":2,"price":1400,"features":"2 habs.,2 baños,95 m²,2ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Apartamento de alquiler en Calle el Castillo, 21, Los Realejos","surface":70,"bedrooms":2,"restrooms":1,"price":900,"features":"2 habs.,1 baño,70 m²,Bajos,Parking","ascensor":false,"piscina":false,"terraza":false,"parking":true}],"Segovia":[{"title":"Casa adosada de alquiler en Avenida de Madrid, Hontanares de Eresma","surface":140,"bedrooms":4,"restrooms":3,"price":600,"features":"4 habs.,3 baños,140 m²,Terraza,Calefacción","ascensor":false,"piscina":false,"terraza":true,"parking":false},{"title":"Piso de alquiler en Segovia Capital","surface":190,"bedrooms":4,"restrooms":2,"price":850,"features":"4 habs.,2 baños,190 m²,2ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Calle Ebro, 25p, El Espinar","surface":81,"bedrooms":2,"restrooms":1,"price":600,"features":"2 habs.,1 baño,81 m²,Ascensor,Parking","ascensor":true,"piscina":false,"terraza":false,"parking":true},{"title":"Loft de alquiler en Calle Escuderos, Segovia Capital","surface":40,"bedrooms":1,"restrooms":1,"price":500,"features":"1 hab.,1 baño,40 m²,Calefacción,Aire acondicionado","ascensor":false,"piscina":false,"terraza":false,"parking":false}],"Sevilla":[{"title":"Casa o chalet de alquiler en Plaza Juan Valladares,, Pilas","surface":100,"bedrooms":2,"restrooms":2,"price":490,"features":"2 habs.,2 baños,100 m²,Calefacción","ascensor":false,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Francisco Luque, 1, Camas","surface":111,"bedrooms":2,"restrooms":2,"price":650,"features":"2 habs.,2 baños,111 m²,Terraza","ascensor":false,"piscina":false,"terraza":true,"parking":false},{"title":"Planta baja de alquiler en Calle Abril, 9, Macarena","surface":71,"bedrooms":3,"restrooms":1,"price":595,"features":"3 habs.,1 baño,71 m²,Bajos,Aire acondicionado","ascensor":false,"piscina":false,"terraza":false,"parking":false},{"title":"Apartamento de alquiler en Plaza San Jacinto, Triana","surface":55,"bedrooms":1,"restrooms":1,"price":675,"features":"1 hab.,1 baño,55 m²,2ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false}],"Soria":[{"title":"Piso de alquiler en Plaza Condes de Lérida, Centro","surface":56,"bedrooms":1,"restrooms":1,"price":530,"features":"1 hab.,1 baño,56 m²,Ascensor,Calefacción","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Apartamento de alquiler en Plaza Calle la Fuente, Retortillo de Soria","surface":65,"bedrooms":2,"restrooms":1,"price":275,"features":"2 habs.,1 baño,65 m²,3ª Planta","ascensor":false,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Calle Jovellanos, 2, Burgo de Osma - Ciudad de Osma","surface":55,"bedrooms":2,"restrooms":1,"price":420,"features":"2 habs.,1 baño,55 m²,Ascensor,Calefacción","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Calle Ramón Benito Aceña, Garray","surface":151,"bedrooms":3,"restrooms":2,"price":650,"features":"3 habs.,2 baños,151 m²,Ascensor,Parking","ascensor":true,"piscina":false,"terraza":false,"parking":true}],"Tarragona":[{"title":"Piso de alquiler en Bloc Sant Marc, 3, Sant Pere i Sant Pau","surface":60,"bedrooms":2,"restrooms":1,"price":600,"features":"2 habs.,1 baño,60 m²,5ª Planta,Aire acondicionado","ascensor":false,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en El Vendrell","surface":136,"bedrooms":5,"restrooms":2,"price":760,"features":"5 habs.,2 baños,136 m²,2ª Planta,Balcón","ascensor":false,"piscina":false,"terraza":false,"parking":false},{"title":"Ático de alquiler en Carrer Pere Martell, Nou Eixample Sud","surface":70,"bedrooms":2,"restrooms":1,"price":700,"features":"2 habs.,1 baño,70 m²,Ascensor,Terraza","ascensor":true,"piscina":false,"terraza":true,"parking":false},{"title":"Casa adosada de alquiler en Carrer Pla de L'estany,  Tarragona Capital","surface":196,"bedrooms":4,"restrooms":3,"price":2000,"features":"4 habs.,3 baños,196 m²,Terraza,Balcón","ascensor":false,"piscina":false,"terraza":true,"parking":false}],"Teruel":[{"title":"Piso de alquiler en  Teruel Capital","surface":130,"bedrooms":4,"restrooms":2,"price":800,"features":"4 habs.,2 baños,130 m²,3ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Travesía Barrio del Carmen, El Pinar -  San León - Las Viñas","surface":120,"bedrooms":4,"restrooms":1,"price":495,"features":"4 habs.,1 baño,120 m²,Terraza,Calefacción","ascensor":false,"piscina":false,"terraza":true,"parking":false},{"title":"Piso de alquiler en Juan Pío Membrado, 4, Alcañiz","surface":85,"bedrooms":3,"restrooms":1,"price":450,"features":"3 habs.,1 baño,85 m²,Ascensor,Parking","ascensor":true,"piscina":false,"terraza":false,"parking":true},{"title":"Piso de alquiler en Ensanche - Fuenfresca","surface":81,"bedrooms":3,"restrooms":1,"price":600,"features":"3 habs.,1 baño,81 m²,1ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false}],"Toledo":[{"title":"Piso de alquiler en Torrijos","surface":100,"bedrooms":2,"restrooms":2,"price":485,"features":"2 habs.,2 baños,100 m²,1ª Planta,Balcón","ascensor":false,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Avenida de Pío XII, Talavera de la Reina","surface":52,"bedrooms":2,"restrooms":1,"price":350,"features":"2 habs.,1 baño,52 m²,Calefacción,Aire acondicionado","ascensor":false,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Ocaña","surface":82,"bedrooms":2,"restrooms":2,"price":450,"features":"2 habs.,2 baños,82 m²,3ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Dúplex de alquiler en Calle Caño, El Viso de San Juan","surface":109,"bedrooms":3,"restrooms":2,"price":550,"features":"3 habs.,2 baños,109 m²,Aire acondicionado","ascensor":false,"piscina":false,"terraza":false,"parking":false}],"Valencia":[{"title":"Piso de alquiler en Calle Danzas, Ciutat Vella","surface":99,"bedrooms":3,"restrooms":1,"price":1300,"features":"3 habs.,1 baño,99 m²,2ª Planta,Balcón","ascensor":false,"piscina":false,"terraza":false,"parking":false},{"title":"Ático de alquiler en Dauradella, Paterna","surface":86,"bedrooms":2,"restrooms":2,"price":1000,"features":"2 habs.,2 baños,86 m²,8ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Casa o chalet de alquiler en Godella","surface":300,"bedrooms":5,"restrooms":3,"price":2800,"features":"5 habs.,3 baños,300 m²,Terraza,Piscina","ascensor":false,"piscina":true,"terraza":true,"parking":false},{"title":"Casa adosada de alquiler en Bétera","surface":190,"bedrooms":3,"restrooms":3,"price":1500,"features":"3 habs.,3 baños,190 m²,Terraza,Balcón","ascensor":false,"piscina":false,"terraza":true,"parking":false}],"Valladolid":[{"title":"Piso de alquiler en Labradores, Valladolid Capital","surface":75,"bedrooms":3,"restrooms":1,"price":595,"features":"3 habs.,1 baño,75 m²,4ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Clavel, Arroyo de la Encomienda","surface":95,"bedrooms":2,"restrooms":2,"price":600,"features":"2 habs.,2 baños,95 m²,1ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Calle Viaje de Aguas, Valladolid Capital","surface":106,"bedrooms":3,"restrooms":2,"price":630,"features":"3 habs.,2 baños,106 m²,Ascensor,Parking","ascensor":true,"piscina":false,"terraza":false,"parking":true},{"title":"Piso de alquiler en Calle Duque de Zaragoza, Valladolid Capital","surface":70,"bedrooms":2,"restrooms":2,"price":650,"features":"2 habs.,2 baños,70 m²,1ª Planta,Parking","ascensor":false,"piscina":false,"terraza":false,"parking":true}],"Zamora":[{"title":"Piso de alquiler en Calle del Sol, 15, Toro","surface":-1,"bedrooms":1,"restrooms":1,"price":350,"features":"1 hab.,1 baño,Ascensor,Balcón,Calefacción","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Casa adosada de alquiler en Coreses","surface":110,"bedrooms":3,"restrooms":1,"price":580,"features":"3 habs.,1 baño,110 m²","ascensor":false,"piscina":false,"terraza":false,"parking":false},{"title":"Ático de alquiler en Santa Catalina, Benavente","surface":80,"bedrooms":3,"restrooms":2,"price":390,"features":"3 habs.,2 baños,80 m²,3ª Planta,Terraza","ascensor":false,"piscina":false,"terraza":true,"parking":false},{"title":"Apartamento de alquiler en Calle Obispo Nieto, Zamora Capital","surface":60,"bedrooms":2,"restrooms":1,"price":400,"features":"2 habs.,1 baño,60 m²,2ª Planta","ascensor":false,"piscina":false,"terraza":false,"parking":false}],"Zaragoza":[{"title":"Apartamento de alquiler en Plaza Mariano Royo,  Zaragoza Capital","surface":45,"bedrooms":1,"restrooms":1,"price":480,"features":"1 hab.,1 baño,45 m²,1ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en  Zaragoza Capital","surface":60,"bedrooms":2,"restrooms":1,"price":580,"features":"2 habs.,1 baño,60 m²,8ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Calle Aldebarán,  Zaragoza Capital","surface":68,"bedrooms":2,"restrooms":2,"price":590,"features":"2 habs.,2 baños,68 m²,5ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false},{"title":"Piso de alquiler en Calle Zoel García Galdeano, Centro","surface":60,"bedrooms":2,"restrooms":2,"price":650,"features":"2 habs.,2 baños,60 m²,3ª Planta,Ascensor","ascensor":true,"piscina":false,"terraza":false,"parking":false}]};
+
+// Photo pools by type (Unsplash apartment images)
+const PHOTOS = {
+  luxury: [
+    'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&q=80',
+    'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600&q=80',
+    'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600&q=80',
+    'https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=600&q=80',
+  ],
+  modern: [
+    'https://images.unsplash.com/photo-1554995207-c18c203602cb?w=600&q=80',
+    'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=600&q=80',
+    'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80',
+    'https://images.unsplash.com/photo-1507089947368-19c1da9775ae?w=600&q=80',
+  ],
+  cozy: [
+    'https://images.unsplash.com/photo-1536376072261-38c75010e6c9?w=600&q=80',
+    'https://images.unsplash.com/photo-1585128792020-803d29415281?w=600&q=80',
+    'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=600&q=80',
+    'https://images.unsplash.com/photo-1598928506311-c55ded91a20c?w=600&q=80',
+  ],
+  studio: [
+    'https://images.unsplash.com/photo-1630699144867-37acec97df5a?w=600&q=80',
+    'https://images.unsplash.com/photo-1560185127-6ed189bf02f4?w=600&q=80',
+    'https://images.unsplash.com/photo-1617104678098-de229db51175?w=600&q=80',
+    'https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?w=600&q=80',
+  ]
+};
+
+function getPhotoForListing(listing, idx) {
+  const hasLuxury = listing.piscina || listing.parking || listing.surface > 100;
+  const isSmall = listing.bedrooms <= 1 || listing.surface < 50;
+  const hasOutdoor = listing.terraza;
+  
+  let pool;
+  if (hasLuxury) pool = PHOTOS.luxury;
+  else if (isSmall) pool = PHOTOS.studio;
+  else if (hasOutdoor) pool = PHOTOS.cozy;
+  else pool = PHOTOS.modern;
+  
+  return pool[idx % pool.length];
+}
+
+function syncToggle(cb) {
+  cb.closest('.toggle-item').classList.toggle('active', cb.checked);
+}
+
+function showError(msg) {
+  document.getElementById('loading').classList.remove('show');
+  const box = document.getElementById('resultBox');
+  box.innerHTML = \`<div class="result-error">⚠️ \${msg}</div>\`;
+  box.classList.add('show');
+}
+
+function renderListings(province, predictedPrice) {
+  const listings = LISTINGS[province] || [];
+  const section = document.getElementById('listingsSection');
+  const grid = document.getElementById('listingsGrid');
+  const countEl = document.getElementById('listingsCount');
+  
+  document.getElementById('listingsProvince').textContent = province;
+  
+  if (!listings.length) {
+    grid.innerHTML = '<div class="no-listings">No hay pisos disponibles para esta provincia.</div>';
+    countEl.textContent = '0 pisos';
+    section.style.display = 'block';
+    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    return;
+  }
+
+  countEl.textContent = listings.length + ' pisos encontrados';
+
+  grid.innerHTML = listings.map((l, i) => {
+    const photo = getPhotoForListing(l, i);
+    const feats = [];
+    if (l.ascensor) feats.push('Ascensor');
+    if (l.piscina) feats.push('Piscina');
+    if (l.terraza) feats.push('Terraza');
+    if (l.parking) feats.push('Parking');
+
+    const diff = predictedPrice ? ((l.price - predictedPrice) / predictedPrice * 100).toFixed(0) : null;
+    const diffBadge = diff !== null
+      ? \`<span style="font-size:.7rem;padding:.2rem .5rem;border-radius:6px;font-weight:600;background:\${diff > 0 ? 'rgba(248,113,113,0.15)' : 'rgba(52,211,153,0.15)'};color:\${diff > 0 ? '#f87171' : '#34d399'}">\${diff > 0 ? '+' : ''}\${diff}% vs estimado</span>\`
+      : '';
+
+    return \`
+    <div class="listing-card" style="animation-delay:\${i * 0.08}s">
+      <div class="card-img">
+        <img src="\${photo}" alt="\${l.title}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=card-img-placeholder>🏠</div>'">
+      </div>
+      <div class="card-body">
+        <div class="card-province">\${province}</div>
+        <div class="card-title">\${l.title}</div>
+        <div class="card-stats">
+          <span class="stat-pill">📐 \${l.surface} m²</span>
+          <span class="stat-pill">🛏 \${l.bedrooms} hab.</span>
+          <span class="stat-pill">🚿 \${l.restrooms} baño\${l.restrooms > 1 ? 's' : ''}</span>
+        </div>
+        \${feats.length ? \`<div class="card-features">\${feats.map(f => \`<span class="feat-tag on">\${f}</span>\`).join('')}</div>\` : ''}
+        <div class="card-footer">
+          <div class="card-price">\${l.price.toLocaleString('es-ES')} €<span>/mes</span></div>
+          \${diffBadge}
+        </div>
+      </div>
+    </div>\`;
+  }).join('');
+
+  section.style.display = 'block';
+  setTimeout(() => section.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+}
+
+async function getPrediction() {
+  const surface = parseInt(document.getElementById('surface').value);
+  const bedrooms = parseInt(document.getElementById('bedrooms').value);
+  const restrooms = parseInt(document.getElementById('restrooms').value);
+  const location_name = document.getElementById('location_name').value;
+
+  if (!location_name || isNaN(surface) || isNaN(bedrooms) || isNaN(restrooms)) {
+    showError('Por favor, rellena todos los campos obligatorios.');
+    return;
+  }
+
+  const toggles = {};
+  document.querySelectorAll('.toggle-item').forEach(item => {
+    toggles[item.dataset.key] = item.querySelector('input[type=checkbox]').checked;
+  });
+
+  const payload = { surface, bedrooms, restrooms, location_name, ...toggles };
+
+  document.getElementById('loading').classList.add('show');
+  document.getElementById('resultBox').classList.remove('show');
+  document.getElementById('listingsSection').style.display = 'none';
+
+  try {
+    const res = await fetch('https://taller-data-fs-s8dg.onrender.com/predict', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+    document.getElementById('loading').classList.remove('show');
+
+    if (data.predicted_price !== undefined) {
+      const price = data.predicted_price;
+      const priceFormatted = price > 0
+        ? price.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €/mes'
+        : '— (sin datos suficientes)';
+
+      document.getElementById('resultBox').innerHTML = \`
+        <div class="result-label">Precio estimado mensual</div>
+        <div class="result-price">\${price > 0 ? price.toLocaleString('es-ES', {minimumFractionDigits:2,maximumFractionDigits:2}) + ' €' : '—'}</div>
+        <div class="result-note">Estimación para \${surface}m² en \${location_name} · \${bedrooms} hab. · \${restrooms} baño(s)</div>
+      \`;
+      document.getElementById('resultBox').classList.add('show');
+
+      renderListings(location_name, price > 0 ? price : null);
+
+    } else if (data.error) {
+      showError(data.error);
+    }
+  } catch (err) {
+    document.getElementById('loading').classList.remove('show');
+    showError('No se pudo conectar con la API. Inténtalo de nuevo.');
+  }
+}
+</script>
+</body>
+</html>
